@@ -1,0 +1,152 @@
+Git cloning, branching and merging
+
+Issue :
+
+fatal: authentication failed for '' from tfs server git repo
+<app-header \[title\] = "'Bill Entry'"></app-header>
+<ion-content> 
+  <ng-container \*ngIf="true">  
+    <ion-card \*ngIf="cfoDashboard\?\.length <= 0" mode="md">
+      <ion-card-content>
+        <ion-item-group>
+          <ion-item>
+            <ion-label class="">No CFO Data Available</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-card-content>
+    </ion-card>
+    
+        <ion-card \*ngIf="cfoDashboard\?\.length> 0" mode="md">
+          <ion-card-content>
+            <ion-item-group>
+              <ion-item \*ngFor="let cfoData of cfoDashboard">
+                <ion-label class="">\{\{cfoData\.name\}\}</ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-card-content>
+        </ion-card>    
+  </ng-container>  
+</ion-content>
+<app-footer></app-footer>
+
+Solution:- Create log of your commands
+To do so...
+	1. Open Command Prompt
+	2. Run setx GIT_TRACE %UserProfile%\git.log
+	3. Run setx GCM_TRACE %UserProfile%\git.log
+	4. Close and re-open any console or IDE which relies on Git + GCM.
+	5. Reproduce your issue.
+
+From <https://github.com/Microsoft/Git-Credential-Manager-for-Windows/issues/662> 
+
+See the logs 
+Error would be your got server not reaching with this credential
+	- 10:40:17.757685 ...aseSecureStore.cs:59 trace: [Delete] credentials not found for 'git:https://tfs.accountantsworld.com'.
+
+Go to credentials manager and remove git related generic credential and add following
+
+URL:git- git:https://tfs.accountantsworld.com
+Username and password:- tfs username and password.
+
+Thursday, June 4, 2020
+2:33 PM
+
+	1. Initialize your local folder
+	- Git init
+	2. Clone project 
+	- Git clone <Project URL>
+     - To clone branches 
+	- git clone -b Development <<https://tfs.accountantsworld.com/tfs/aw-collection/_git/PayrollRelief-App>>
+	
+	1. List of branch
+	- Git branch
+	2. Create Branch
+	- Git branch dev-branch
+	3. Move to branches (to make branch active)
+	- Git checkout dev-branch
+	4. Add the changes and commit
+	- Git add .    Or git add  <file>
+	- Git commit -m "message-here"
+	4. To see logs
+	- Git log
+	
+	5. Mege branches to master 
+	- Go to master and run following query
+	- Git merge Dashboard-dev 
+	- Write a message and write and quite 
+	- :wq
+	- :q
+	- Git Push for adding changes to parent branch. 
+
+	5. Push code to the server
+	- Git push    ---pushes the current branch. 
+	6. Push your another branch (DashBoard-Dev_
+	A. Go to DashBoard-dev branch
+	- Git checkout DashBoard-Dev
+	B. Push now on the current branch
+	- Git push 
+	Ø If this is first time you have to run this code as well to create branch on the server
+	- Git push --set-upstream origin DashBoard-Dev
+
+	B. Remove branch
+	- Stay on master branch
+	- Git branch -d dummy
+	8. See Git configuration
+	- git config --list
+	9. See Change set list
+	- git status -s or git status
+	6. Pull the code
+	-git pull 
+	
+So you want to git force pull‍
+
+For the Googlers: there’s no such thing as `git force pull` -- instead, you want to run these two commands:
+
+git stash
+git pull‍
+
+Together, these commands will discard your local changes (saving them for later) and replace them with the latest commit from your remote branch. Good luck!
+
+
+	Create a Branch
+		• Create branch when master branch is checked out. Here commits in master will be synced to the branch you created.
+$ git branch branch1
+		• Create branch when branch1 is checked out . Here commits in branch1 will be synced to branch2
+$ git branch branch2
+	
+	Checkout a Branch
+	git checkout command switch branches or restore working tree files
+		• $ git checkout branchname
+	
+	Renaming a Branch
+		• $ git branch -m branch1 newbranchname
+	
+	Delete a Branch
+		• $ git branch -d branch-to-delete
+		• $ git branch -D branch-to-delete ( force deletion without checking the merged status )
+	
+	Create and Switch Branch
+		• $ git checkout -b branchname
+	
+	Branches that are completely included
+		• $ git branch --merged
+	
+	
+	************************** Branch Differences [ git diff branch1..branch2 ] ************************
+	Multiline difference
+		• $ git diff master..branch1
+	Singleline difference
+		• $ git diff --color-words branch1..branch2
+	
+
+
+Git stage and commit the code
+Git add . 
+Git commit -m "comment here"
+
+
+fatal: The current branch dev-clientsList has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin dev-clientsList
+
